@@ -4,7 +4,8 @@ const path = require('path');
 const crypto = require('crypto');
 
 const PORT = 8080; // Standard local port for testing
-const DB_FILE = path.join(__dirname, 'db.json');
+const isVercel = process.env.VERCEL;
+const DB_FILE = isVercel ? '/tmp/db.json' : path.join(process.cwd(), 'db.json');
 
 // Initialize database
 let db = { users: {}, sessions: {} };
@@ -54,8 +55,8 @@ function readJSONBody(req) {
     });
 }
 
-// Create server
-const server = http.createServer(async (req, res) => {
+// Core Request Handler
+const handler = async (req, res) => {
     const sendJSON = (status, obj, headers = {}) => {
         res.writeHead(status, { 'Content-Type': 'application/json', ...headers });
         res.end(JSON.stringify(obj));
@@ -147,15 +148,13 @@ const server = http.createServer(async (req, res) => {
         return sendJSON(200, { success: true }, { 'Set-Cookie': cookieVal });
     }
 
-    // --- STATIC FILES SERVING ---
-
-    if (req.method === 'GET') {
-        // Fallback root to index.html
+    // --- STATIC FILES SERVING (Only used locally as Vercel serves static files directly) ---
+    if (!isVercel && req.method === 'GET') {
         let filename = pathname === '/' ? 'index.html' : pathname.substring(1);
-        let filePath = path.join(__dirname, filename);
+        let filePath = path.join(process.cwd(), filename);
 
         // Basic security check (prevent directory traversal)
-        const relative = path.relative(__dirname, filePath);
+        const relative = path.relative(process.cwd(), filePath);
         const isSafe = relative && !relative.startsWith('..') && !path.isAbsolute(relative);
 
         if (isSafe && fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
@@ -180,9 +179,14 @@ const server = http.createServer(async (req, res) => {
     // Fallback 404
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('404 Not Found');
-});
+};
 
-server.listen(PORT, () => {
-    console.log(`omerdover server running at http://localhost:${PORT}/`);
-    console.log(`Working directory: ${__dirname}`);
-});
+if (isVercel) {
+    module.exports = handler;
+} else {
+    const server = http.createServer(handler);
+    server.listen(PORT, () => {
+        console.log(`omerdover server running at http://localhost:${PORT}/`);
+        console.log(`Working directory: ${process.cwd()}`);
+    });
+}

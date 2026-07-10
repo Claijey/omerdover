@@ -1,4 +1,9 @@
 {
+  "name": "omerdover",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node api/server.js"
+  },
   "devDependencies": {
     "vercel": "^55.0.0"
   }
