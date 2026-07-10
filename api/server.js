@@ -17,6 +17,9 @@ if (fs.existsSync(DB_FILE)) {
     }
 }
 
+// Make sure users property is initialized
+if (!db.users) db.users = {};
+
 function saveDB() {
     try {
         fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), 'utf8');
@@ -25,7 +28,7 @@ function saveDB() {
     }
 }
 
-// Cookie Helper
+// Cookie Helpers
 function getCookie(req, name) {
     const list = {};
     const cookieHeader = req.headers.cookie;
@@ -36,6 +39,27 @@ function getCookie(req, name) {
         });
     }
     return list[name];
+}
+
+// Encode session data into a base64 cookie token
+function encodeSession(username, score) {
+    const rawStr = `${username}|${score}`;
+    return Buffer.from(rawStr, 'utf8').toString('base64');
+}
+
+// Decode session data from a base64 cookie token
+function decodeSession(token) {
+    if (!token) return null;
+    try {
+        const rawStr = Buffer.from(token, 'base64').toString('utf8');
+        const parts = rawStr.split('|');
+        if (parts.length === 2) {
+            return { username: parts[0], score: parseInt(parts[1], 10) || 0 };
+        }
+    } catch (e) {
+        console.error("Failed to decode session token:", e);
+    }
+    return null;
 }
 
 // JSON body parser helper
@@ -70,12 +94,21 @@ const handler = async (req, res) => {
     // Get current logged-in user profile
     if (pathname === '/api/me' && req.method === 'GET') {
         const sessionId = getCookie(req, 'sessionId');
-        if (sessionId && db.sessions[sessionId]) {
-            const userKey = db.sessions[sessionId];
-            const user = db.users[userKey];
-            if (user) {
-                return sendJSON(200, { loggedIn: true, username: user.username, score: user.score });
+        const session = decodeSession(sessionId);
+        if (session) {
+            const { username, score } = session;
+            const userKey = username.toLowerCase();
+            
+            // Re-sync with container database
+            if (!db.users[userKey]) {
+                db.users[userKey] = { username, score };
+                saveDB();
+            } else if (db.users[userKey].score < score) {
+                db.users[userKey].score = score;
+                saveDB();
             }
+            
+            return sendJSON(200, { loggedIn: true, username: db.users[userKey].username, score: db.users[userKey].score });
         }
         return sendJSON(200, { loggedIn: false });
     }
@@ -90,22 +123,20 @@ const handler = async (req, res) => {
         const trimmedUser = username.trim().substring(0, 20); // Cap username length
         const userKey = trimmedUser.toLowerCase();
 
-        // Check if user already exists
+        // Check if user already exists in local DB
         if (db.users[userKey]) {
             return sendJSON(400, { success: false, message: 'Username is already taken!' });
         }
 
-        // Generate secure random session token
-        const token = crypto.randomBytes(32).toString('hex');
-
-        // Store user and map session
+        // Store user locally
         db.users[userKey] = {
             username: trimmedUser,
-            score: 0,
-            token: token
+            score: 0
         };
-        db.sessions[token] = userKey;
         saveDB();
+
+        // Generate base64 session token
+        const token = encodeSession(trimmedUser, 0);
 
         // Set HttpOnly long-lived session cookie (10 years)
         const cookieVal = `sessionId=${token}; Max-Age=${10 * 365 * 24 * 60 * 60}; Path=/; SameSite=Lax; HttpOnly`;
@@ -115,14 +146,28 @@ const handler = async (req, res) => {
     // Increment whip count
     if (pathname === '/api/whip' && req.method === 'POST') {
         const sessionId = getCookie(req, 'sessionId');
-        if (sessionId && db.sessions[sessionId]) {
-            const userKey = db.sessions[sessionId];
-            const user = db.users[userKey];
-            if (user) {
-                user.score++;
-                saveDB();
-                return sendJSON(200, { success: true, score: user.score });
+        const session = decodeSession(sessionId);
+        if (session) {
+            const { username, score } = session;
+            const userKey = username.toLowerCase();
+
+            // Re-sync user record in container memory if missing
+            if (!db.users[userKey]) {
+                db.users[userKey] = { username, score };
+            } else if (db.users[userKey].score < score) {
+                db.users[userKey].score = score;
             }
+
+            // Increment score
+            db.users[userKey].score++;
+            saveDB();
+
+            const newScore = db.users[userKey].score;
+            const token = encodeSession(username, newScore);
+
+            // Update session cookie with the new score
+            const cookieVal = `sessionId=${token}; Max-Age=${10 * 365 * 24 * 60 * 60}; Path=/; SameSite=Lax; HttpOnly`;
+            return sendJSON(200, { success: true, score: newScore }, { 'Set-Cookie': cookieVal });
         }
         return sendJSON(401, { success: false, message: 'Unauthorized session' });
     }
@@ -138,12 +183,7 @@ const handler = async (req, res) => {
 
     // Logout
     if (pathname === '/api/logout' && req.method === 'POST') {
-        const sessionId = getCookie(req, 'sessionId');
-        if (sessionId) {
-            delete db.sessions[sessionId];
-            saveDB();
-        }
-        // Clear cookie
+        // Clear session cookie
         const cookieVal = `sessionId=; Max-Age=0; Path=/; SameSite=Lax; HttpOnly`;
         return sendJSON(200, { success: true }, { 'Set-Cookie': cookieVal });
     }
