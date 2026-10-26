@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0000ff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,6 +12,15 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overscroll-behavior: none;
+            -webkit-overscroll-behavior: none;
+        }
+
         /* Retro 2000s chaotic background and style */
         body {
             background-color: #0000ff; /* Bright blue background */
@@ -19,14 +28,12 @@
             color: #ffff00; /* Neon yellow */
             font-family: "Comic Sans MS", "Chalkboard SE", "Comic Sans", cursive, sans-serif;
             text-align: center;
-            margin: 0;
-            padding: 0 0 30px 0;
             overflow-x: hidden;
             user-select: none;
             -webkit-user-select: none;
             -webkit-touch-callout: none;
-            cursor: pointer; /* Whole screen is clickable */
-            touch-action: manipulation;
+            cursor: pointer;
+            touch-action: none; /* Prevents any gesture from dragging the webpage on mobile */
             min-height: 100vh;
         }
 
@@ -35,13 +42,15 @@
             background: #ff0000;
             color: #ffffff;
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-            font-size: clamp(15px, 3.8vw, 24px);
-            padding: 8px 0;
-            border-bottom: 5px ridge #ffff00;
+            font-size: clamp(14px, 3.6vw, 22px);
+            padding: 6px 0;
+            border-bottom: 4px ridge #ffff00;
             text-shadow: 2px 2px 0px #000000;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             overflow: hidden;
             white-space: nowrap;
+            height: 34px;
+            line-height: 20px;
         }
 
         /* Main retro container */
@@ -51,18 +60,61 @@
             margin: 15px auto;
             background: #00ffff; /* Cyan container */
             border: 8px outset #00ff00; /* Green 3D bevel */
-            padding: 20px 12px;
+            padding: 16px 12px;
             box-shadow: 8px 8px 0px #000000;
             position: relative;
+            touch-action: none;
         }
 
-        @media (min-width: 600px) {
+        @media (min-width: 769px) {
+            body {
+                touch-action: auto;
+                overflow-y: auto;
+                padding-bottom: 40px;
+            }
             .container {
                 width: calc(100% - 32px);
-                margin: 30px auto;
+                margin: 25px auto;
                 border-width: 12px;
-                padding: 30px;
+                padding: 25px;
                 box-shadow: 15px 15px 0px #000000;
+            }
+        }
+
+        /* Mobile specific fixed non-scroll lock */
+        @media (max-width: 768px) {
+            html, body {
+                position: fixed;
+                width: 100vw;
+                height: 100vh;
+                height: 100dvh;
+                overflow: hidden !important;
+                touch-action: none !important;
+            }
+
+            .container {
+                width: calc(100% - 14px);
+                max-height: calc(100dvh - 42px);
+                margin: 4px auto;
+                padding: 10px 8px;
+                border-width: 6px;
+                overflow-y: hidden;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+            }
+
+            .leaderboard-panel.inline-panel {
+                display: none !important; /* Mobile uses dedicated modal so screen never scrolls */
+            }
+
+            .visitor-section {
+                margin-top: 8px !important;
+                padding-top: 6px !important;
+            }
+
+            .footer-copyright {
+                display: none;
             }
         }
 
@@ -75,18 +127,18 @@
                 #000000 10px,
                 #000000 20px
             );
-            height: 15px;
+            height: 12px;
             width: 100%;
-            margin: 12px 0;
+            margin: 8px 0;
             border: 2px inset #fff;
         }
 
         h1 {
             font-family: Impact, Arial Black, sans-serif;
-            font-size: clamp(32px, 8.5vw, 56px);
+            font-size: clamp(28px, 7.5vw, 52px);
             color: #ff00ff;
             text-shadow: 3px 3px 0px #000000;
-            margin: 5px 0 10px 0;
+            margin: 2px 0 6px 0;
             letter-spacing: clamp(1px, 0.8vw, 3px);
             animation: rainbow-text 1.5s infinite linear;
             line-height: 1.1;
@@ -103,12 +155,12 @@
 
         /* Subtitle blinking */
         .subtitle {
-            font-size: clamp(12px, 3.2vw, 18px);
+            font-size: clamp(11px, 2.8vw, 16px);
             color: #ff0000;
             font-weight: bold;
             text-shadow: 1px 1px 0 #fff;
-            margin-bottom: 15px;
-            line-height: 1.3;
+            margin-bottom: 8px;
+            line-height: 1.25;
         }
 
         .blink {
@@ -123,31 +175,32 @@
         .counter-box {
             background-color: #000000;
             border: 4px inset #808080;
-            padding: 12px 8px;
-            margin: 15px auto;
+            padding: 8px 6px;
+            margin: 8px auto;
             width: 100%;
             max-width: 520px;
             font-family: "Courier New", Courier, monospace;
             font-weight: bold;
-            color: #00ff00; /* Neon green terminal style */
-            font-size: clamp(20px, 5.8vw, 36px);
+            color: #00ff00;
+            font-size: clamp(18px, 5.2vw, 34px);
             box-shadow: inset 0 0 15px #00ff00;
             text-shadow: 0 0 5px #00ff00;
-            line-height: 1.25;
+            line-height: 1.2;
         }
 
         @media (min-width: 600px) {
             .counter-box {
                 border-width: 6px;
-                padding: 15px;
+                padding: 12px;
                 width: 85%;
+                margin: 12px auto;
             }
         }
 
         .whip-rank {
-            font-size: clamp(12px, 3.2vw, 16px);
+            font-size: clamp(11px, 3vw, 15px);
             color: #ffaa00;
-            margin-top: 6px;
+            margin-top: 4px;
             font-family: "Comic Sans MS", cursive, sans-serif;
             text-shadow: none;
             word-break: break-word;
@@ -157,14 +210,14 @@
         .image-wrapper {
             position: relative;
             display: inline-block;
-            margin: 10px auto;
+            margin: 6px auto;
             border: 6px groove #e6e6e6;
             background-color: #000;
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.3);
             user-select: none;
             -webkit-user-select: none;
             cursor: pointer;
-            touch-action: manipulation;
+            touch-action: none;
             transition: transform 0.05s ease;
             max-width: 100%;
         }
@@ -173,7 +226,7 @@
             .image-wrapper {
                 border-width: 10px;
                 box-shadow: 8px 8px 0px rgba(0,0,0,0.3);
-                margin: 15px auto;
+                margin: 12px auto;
             }
         }
 
@@ -183,16 +236,22 @@
 
         .image-wrapper img {
             display: block;
-            width: min(380px, 72vw);
-            height: min(380px, 72vw);
+            width: min(340px, 48vw);
+            height: min(340px, 48vw);
             max-width: 100%;
             aspect-ratio: 1 / 1;
             object-fit: cover;
-            /* CRITICAL CSS: prevents selection, dragging, and cursor interactions */
             user-select: none;
             -webkit-user-select: none;
             -webkit-user-drag: none;
             pointer-events: none; 
+        }
+
+        @media (max-width: 768px) {
+            .image-wrapper img {
+                width: min(220px, 45vw);
+                height: min(220px, 45vw);
+            }
         }
 
         /* Shake animation when whipped */
@@ -221,24 +280,24 @@
         }
 
         .whip-hint {
-            font-size: clamp(11px, 3.2vw, 13px);
+            font-size: clamp(10px, 2.8vw, 13px);
             color: #000080;
             font-weight: bold;
-            margin: 12px auto;
-            padding: 8px 10px;
+            margin: 6px auto;
+            padding: 4px 8px;
             background: rgba(255, 255, 255, 0.75);
             border: 2px dashed #000080;
             max-width: 520px;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
         /* Retro Buttons */
         .btn-container {
-            margin-top: 15px;
+            margin-top: 8px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-retro {
@@ -249,10 +308,10 @@
             border-bottom: 3px solid #808080;
             border-right: 3px solid #808080;
             font-family: 'MS Sans Serif', Geneva, sans-serif;
-            font-size: clamp(12px, 3.2vw, 14px);
+            font-size: clamp(11px, 3vw, 13px);
             font-weight: bold;
-            padding: 8px 16px;
-            min-height: 42px;
+            padding: 6px 12px;
+            min-height: 36px;
             cursor: pointer;
             outline: none;
             box-shadow: 1px 1px 0px #000000;
@@ -272,9 +331,9 @@
         .sparkle-text {
             color: #ff00ff;
             font-weight: bold;
-            font-size: clamp(18px, 5vw, 24px);
+            font-size: clamp(16px, 4.5vw, 22px);
             display: inline-block;
-            margin-top: 8px;
+            margin-top: 4px;
             animation: pulse-text 0.8s infinite alternate;
         }
 
@@ -285,33 +344,33 @@
 
         /* Visitor Guestbook Counter Badge & Web Badges */
         .visitor-section {
-            margin-top: 25px;
-            border-top: 4px dashed #ff00ff;
-            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 3px dashed #ff00ff;
+            padding-top: 10px;
         }
 
         .guestbook-title {
-            font-size: clamp(14px, 3.8vw, 18px);
+            font-size: clamp(12px, 3.4vw, 16px);
             color: #000000;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .footer-badges {
-            margin-top: 15px;
+            margin-top: 8px;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .badge {
-            width: 88px;
-            height: 31px;
+            width: 80px;
+            height: 28px;
             border: 2px solid #808080;
             background: #000000;
             color: #ffffff;
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 9px;
+            font-size: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -345,7 +404,7 @@
             animation: blink-anim 0.8s step-start infinite;
         }
 
-        /* Retro Modal style for signup */
+        /* Retro Modal style for signup & leaderboard */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -356,8 +415,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 10000;
+            z-index: 100000;
             padding: 15px;
+            touch-action: pan-y;
         }
         
         .modal-box {
@@ -367,8 +427,8 @@
             border-bottom: 4px solid #808080;
             border-right: 4px solid #808080;
             width: 100%;
-            max-width: 400px;
-            padding: 18px;
+            max-width: 440px;
+            padding: 16px;
             box-shadow: 8px 8px 0px #000000;
             text-align: left;
             color: #000000;
@@ -380,12 +440,33 @@
             padding: 4px 8px;
             font-family: Arial, sans-serif;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 14px;
             margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 2px inset #fff;
+        }
+
+        .modal-close-btn {
+            background: #d4d0c8;
+            color: #000;
+            border-top: 2px solid #fff;
+            border-left: 2px solid #fff;
+            border-bottom: 2px solid #808080;
+            border-right: 2px solid #808080;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 0 6px;
+            cursor: pointer;
+            line-height: 16px;
+        }
+
+        .modal-close-btn:active {
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-bottom: 2px solid #fff;
+            border-right: 2px solid #fff;
         }
 
         .modal-input {
@@ -409,6 +490,12 @@
             animation: blink-anim 0.5s step-start infinite;
         }
 
+        .scrollable-content {
+            touch-action: pan-y !important;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
         /* Leaderboard Panel styles */
         .leaderboard-panel {
             background: #d4d0c8;
@@ -416,7 +503,7 @@
             border-left: 3px solid #ffffff;
             border-bottom: 3px solid #808080;
             border-right: 3px solid #808080;
-            margin-top: 20px;
+            margin-top: 15px;
             padding: 10px;
             box-shadow: 6px 6px 0px #000000;
             color: #000000;
@@ -427,8 +514,8 @@
         @media (min-width: 600px) {
             .leaderboard-panel {
                 border-width: 4px;
-                margin-top: 25px;
-                padding: 15px;
+                margin-top: 20px;
+                padding: 14px;
                 box-shadow: 8px 8px 0px #000000;
             }
         }
@@ -439,8 +526,8 @@
             padding: 4px 8px;
             font-family: Arial, sans-serif;
             font-weight: bold;
-            font-size: clamp(13px, 3.5vw, 16px);
-            margin-bottom: 10px;
+            font-size: clamp(13px, 3.5vw, 15px);
+            margin-bottom: 8px;
             border: 2px inset #fff;
         }
 
@@ -449,24 +536,24 @@
             border-collapse: collapse;
             font-family: Arial, sans-serif;
             background: #ffffff;
-            min-width: 250px;
+            min-width: 240px;
         }
 
         .leaderboard-table th {
             background: #808080;
             color: #ffffff;
-            padding: 6px 4px;
+            padding: 5px 4px;
             border: 2px outset #ffffff;
             text-align: left;
-            font-size: clamp(11px, 3vw, 13px);
+            font-size: clamp(11px, 2.8vw, 13px);
         }
 
         .leaderboard-table td {
-            padding: 6px 4px;
+            padding: 5px 4px;
             border: 2px inset #ffffff;
             font-family: "Courier New", Courier, monospace;
             font-weight: bold;
-            font-size: clamp(11px, 3vw, 13px);
+            font-size: clamp(11px, 2.8vw, 13px);
             word-break: break-all;
         }
         
@@ -482,10 +569,10 @@
         /* Combo counter styles */
         .combo-box {
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-            font-size: clamp(30px, 8.5vw, 54px);
+            font-size: clamp(26px, 7.5vw, 50px);
             color: #ff3300;
             text-shadow: 3px 3px 0px #ffff00, -2px -2px 0px #000;
-            margin: 10px auto 5px auto;
+            margin: 6px auto 3px auto;
             display: none;
             text-align: center;
             font-weight: bold;
@@ -520,51 +607,57 @@
 
     <!-- Top marquee banner -->
     <div class="marquee-banner">
-        <marquee scrollamount="8" behavior="scroll" direction="left">
-            🔥 WELCOME TO omerdover v1.0! 🔥 FLICK MOUSE OR TAP/SWIPE ON MOBILE TO CRACK THE WHIP! ⚡ BOTH WHIP & SCREAM SOUNDS ACTIVATED! 🔊 NOW 100% OPTIMIZED FOR MOBILE & TABLETS! 📱 RETRO EXPERIENCES FOREVER! 🚀 NO COOKIES WERE HARMED IN THE MAKING OF THIS MEME... EXCLUDING THE ONE SAVING YOUR SCORE! 🍪
+        <marquee scrollamount="7" behavior="scroll" direction="left">
+            🔥 WELCOME TO omerdover v1.0! 🔥 FLICK MOUSE OR TAP/SWIPE ON MOBILE TO CRACK THE WHIP! ⚡ 100% SCREEN-LOCKED FOR MOBILE! 📱 NO JITTER, NO BOUNCE! 🚀 NO COOKIES WERE HARMED IN THE MAKING OF THIS MEME... EXCLUDING THE ONE SAVING YOUR SCORE! 🍪
         </marquee>
     </div>
 
     <!-- Center layout container -->
     <div class="container">
-        <h1>omerdover v1.0</h1>
-        
-        <div class="subtitle blink">
-            !!! WARNING: EXTREME RETRO ENERGY DETECTED !!!
+        <div>
+            <h1>omerdover v1.0</h1>
+            
+            <div class="subtitle blink">
+                !!! WARNING: EXTREME RETRO ENERGY DETECTED !!!
+            </div>
+
+            <div class="construction-tape"></div>
+
+            <!-- The main whip count board -->
+            <div class="counter-box" id="counter-box">
+                Whip Count: <span id="whip-count-val">0</span>
+                <div class="whip-rank" id="whip-rank-val">Rank: Whip Novice (Tap or flick to start!)</div>
+            </div>
+
+            <!-- Combo Counter UI -->
+            <div id="combo-box" class="combo-box">COMBO X<span id="combo-count-val">0</span></div>
         </div>
-
-        <div class="construction-tape"></div>
-
-        <!-- The main whip count board -->
-        <div class="counter-box" id="counter-box">
-            Whip Count: <span id="whip-count-val">0</span>
-            <div class="whip-rank" id="whip-rank-val">Rank: Whip Novice (Tap or flick to start!)</div>
-        </div>
-
-        <!-- Combo Counter UI -->
-        <div id="combo-box" class="combo-box">COMBO X<span id="combo-count-val">0</span></div>
 
         <!-- Interactive Image Wrapper -->
-        <div class="image-wrapper" id="whip-image-wrapper">
-            <img alt="Omer" id="whip-target-img">
+        <div>
+            <div class="image-wrapper" id="whip-image-wrapper">
+                <img alt="Omer" id="whip-target-img">
+            </div>
+
+            <div>
+                <span class="sparkle-text">💥 CRACK! 💥</span>
+            </div>
         </div>
 
         <div>
-            <span class="sparkle-text">💥 CRACK! 💥</span>
+            <div class="whip-hint">
+                💻 <strong>PC:</strong> Fareyi hızla savur! | 📱 <strong>Mobil:</strong> Ekrana dokun veya parmağını savur!
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-retro" id="reset-btn">Reset</button>
+                <button class="btn-retro" id="mute-btn">Sound: ON</button>
+                <button class="btn-retro" id="open-leaderboard-btn">🏆 Hall of Fame</button>
+            </div>
         </div>
 
-        <div class="whip-hint">
-            💻 <strong>PC:</strong> Fareyi fotoğrafa doğru hızla savurun!<br>
-            📱 <strong>Mobil & Tablet:</strong> Ömer'e dokunun veya parmağınızı hızla savurun!
-        </div>
-
-        <div class="btn-container">
-            <button class="btn-retro" id="reset-btn">Reset Score</button>
-            <button class="btn-retro" id="mute-btn">Toggle Sound: ON</button>
-        </div>
-
-        <!-- Shared Leaderboard Panel -->
-        <div class="leaderboard-panel">
+        <!-- Shared Leaderboard Panel (Visible on Desktop/Tablets) -->
+        <div class="leaderboard-panel inline-panel">
             <div class="leaderboard-title">
                 🏆 GLOBAL WHIPPING HALL OF FAME
             </div>
@@ -598,8 +691,37 @@
         </div>
     </div>
 
-    <div style="font-size: 11px; margin-bottom: 20px; color: #a3a3c2;">
+    <div class="footer-copyright" style="font-size: 11px; margin-bottom: 15px; color: #a3a3c2;">
         © 2001 omerdover Corp. All Rights Reserved. Under construction. 🏗️
+    </div>
+
+    <!-- Leaderboard Modal Overlay (Works seamlessly on Mobile & Desktop) -->
+    <div id="leaderboard-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <div class="modal-title-bar">
+                <span>🏆 GLOBAL WHIPPING HALL OF FAME</span>
+                <button class="modal-close-btn" id="close-leaderboard-btn">X</button>
+            </div>
+            <div class="scrollable-content" style="max-height: 60vh; overflow-y: auto; padding-right: 4px;">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 18%;">Rank</th>
+                            <th style="width: 52%;">User Name</th>
+                            <th style="width: 30%;">Whips</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modal-leaderboard-body">
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: #808080;">Retrieving scores from CyberSpace...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 12px; text-align: right;">
+                <button class="btn-retro" id="close-leaderboard-btn-bottom">CLOSE</button>
+            </div>
+        </div>
     </div>
 
     <!-- Signup Modal Overlay -->
@@ -644,13 +766,18 @@
         const signupSubmitBtn = document.getElementById('signup-submit-btn');
         const signupError = document.getElementById('signup-error');
         const leaderboardBody = document.getElementById('leaderboard-body');
+        const modalLeaderboardBody = document.getElementById('modal-leaderboard-body');
+        const leaderboardModal = document.getElementById('leaderboard-modal');
+        const openLeaderboardBtn = document.getElementById('open-leaderboard-btn');
+        const closeLeaderboardBtn = document.getElementById('close-leaderboard-btn');
+        const closeLeaderboardBtnBottom = document.getElementById('close-leaderboard-btn-bottom');
 
         // State Variables
         let whipCount = 0;
         let isMuted = false;
         let animationTimeout = null;
         let lastWhipTime = 0;
-        const COOLDOWN = 280; // Responsive debounce allowing quick taps
+        const COOLDOWN = 260; // Fluid debounce allowing fast responsive taps
         let currentUser = null;
         let leaderboardInterval = null;
         let isOfflineMode = false;
@@ -658,9 +785,9 @@
         // Combo System State
         let comboCount = 0;
         let comboTimeout = null;
-        const COMBO_WINDOW = 1500; // 1.5s window to maintain combo
+        const COMBO_WINDOW = 1500;
 
-        // Audio Unlock flag for Mobile Browsers (iOS Safari & Android Chrome)
+        // Audio Unlock for Mobile Browsers
         let audioUnlocked = false;
         function unlockAudio() {
             if (audioUnlocked) return;
@@ -684,7 +811,7 @@
         window.addEventListener('pointerdown', unlockAudio, { once: true, passive: true });
         window.addEventListener('click', unlockAudio, { once: true, passive: true });
 
-        // Haptic feedback helper for smartphones
+        // Haptic feedback helper
         function triggerHaptic(fire = false) {
             if (!navigator.vibrate) return;
             try {
@@ -701,7 +828,6 @@
                 comboCountVal.innerText = comboCount;
                 comboBox.style.display = 'block';
                 
-                // Re-trigger animation
                 comboBox.style.animation = 'none';
                 void comboBox.offsetWidth;
                 comboBox.style.animation = 'combo-pop 0.15s ease-out';
@@ -722,7 +848,7 @@
             updateComboUI();
         }
 
-        // Non-blocking Dynamic Preloader
+        // Preload assets
         window.addEventListener('DOMContentLoaded', () => {
             const targetImg = document.getElementById('whip-target-img');
             if (targetImg) targetImg.src = 'omer.png';
@@ -738,63 +864,42 @@
                 };
             }
 
-            if (whipAudio) {
-                whipAudio.src = 'whip.mp3';
-            }
-
-            if (screamAudioPreload) {
-                screamAudioPreload.src = 'scream.mp3';
-            }
+            if (whipAudio) whipAudio.src = 'whip.mp3';
+            if (screamAudioPreload) screamAudioPreload.src = 'scream.mp3';
         });
 
-        // Offline local cookie helpers
+        // Offline local cookies
         function getLocalCookie(name) {
             try {
                 const nameEQ = name + "=";
                 const ca = document.cookie.split(';');
                 for (let i = 0; i < ca.length; i++) {
                     let c = ca[i].trim();
-                    if (c.indexOf(nameEQ) === 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
                 }
-            } catch (e) {
-                console.error("Error reading cookies:", e);
-            }
+            } catch (e) {}
             return null;
         }
 
         function setLocalCookie(name, value) {
             try {
                 const date = new Date();
-                date.setTime(date.getTime() + (3650 * 24 * 60 * 60 * 1000)); // 10 years
-                const expires = "; expires=" + date.toUTCString();
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
-            } catch (e) {
-                console.error("Error setting cookie:", e);
-            }
+                date.setTime(date.getTime() + (3650 * 24 * 60 * 60 * 1000));
+                document.cookie = name + "=" + (value || "") + "; expires=" + date.toUTCString() + "; path=/; SameSite=Lax";
+            } catch (e) {}
         }
 
-        // Rank updates based on whip count
+        // Rank updates
         function updateRank(count) {
             let rank = "Rank: Whip Novice (Keep flicking!)";
-            if (count === 0) {
-                rank = "Rank: Whip Novice (Tap or flick to start!)";
-            } else if (count > 0 && count <= 10) {
-                rank = "Rank: Whip Trainee 👶";
-            } else if (count > 10 && count <= 50) {
-                rank = "Rank: Whip Cadet 🎖️";
-            } else if (count > 50 && count <= 150) {
-                rank = "Rank: Whip Enthusiast 🤠";
-            } else if (count > 150 && count <= 350) {
-                rank = "Rank: Whip Specialist 🌀";
-            } else if (count > 350 && count <= 750) {
-                rank = "Rank: Whip Master ⚡";
-            } else if (count > 750 && count <= 1500) {
-                rank = "Rank: GRANDMASTER WHIPPER 🏆";
-            } else {
-                rank = "Rank: Please Touch Grass 🌿";
-            }
+            if (count === 0) rank = "Rank: Whip Novice (Tap or flick to start!)";
+            else if (count <= 10) rank = "Rank: Whip Trainee 👶";
+            else if (count <= 50) rank = "Rank: Whip Cadet 🎖️";
+            else if (count <= 150) rank = "Rank: Whip Enthusiast 🤠";
+            else if (count <= 350) rank = "Rank: Whip Specialist 🌀";
+            else if (count <= 750) rank = "Rank: Whip Master ⚡";
+            else if (count <= 1500) rank = "Rank: GRANDMASTER WHIPPER 🏆";
+            else rank = "Rank: Please Touch Grass 🌿";
             rankVal.innerText = rank;
         }
 
@@ -807,29 +912,33 @@
                 if (data.success) {
                     renderLeaderboard(data.users);
                 }
-            } catch (e) {
-                console.error("Error fetching leaderboard:", e);
-            }
+            } catch (e) {}
         }
 
         function renderLeaderboard(users) {
-            leaderboardBody.innerHTML = '';
-            if (users.length === 0) {
-                leaderboardBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #808080;">No hack scores yet!</td></tr>';
-                return;
-            }
-            users.forEach((u, index) => {
-                const tr = document.createElement('tr');
-                if (currentUser && u.username.toLowerCase() === currentUser.toLowerCase()) {
-                    tr.className = 'leaderboard-current-user';
+            const renderTable = (tbody) => {
+                if (!tbody) return;
+                tbody.innerHTML = '';
+                if (users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #808080;">No hack scores yet!</td></tr>';
+                    return;
                 }
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${u.username}</td>
-                    <td>${u.score}</td>
-                `;
-                leaderboardBody.appendChild(tr);
-            });
+                users.forEach((u, index) => {
+                    const tr = document.createElement('tr');
+                    if (currentUser && u.username.toLowerCase() === currentUser.toLowerCase()) {
+                        tr.className = 'leaderboard-current-user';
+                    }
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${u.username}</td>
+                        <td>${u.score}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            };
+
+            renderTable(leaderboardBody);
+            renderTable(modalLeaderboardBody);
         }
 
         function startLeaderboardPolling() {
@@ -838,7 +947,7 @@
             leaderboardInterval = setInterval(fetchLeaderboard, 5000);
         }
 
-        // Helper to calculate target center direction angle
+        // Target angle calculation
         function getAngleToTarget(originX = mouseX, originY = mouseY) {
             const targetImg = document.getElementById('whip-target-img');
             if (!targetImg) return Math.PI / 4;
@@ -848,7 +957,7 @@
             return Math.atan2(centerY - originY, centerX - originX);
         }
 
-        // Initialize state on load
+        // Initialize state
         async function init() {
             try {
                 const res = await fetch('/api/me');
@@ -866,39 +975,20 @@
                     fetchLeaderboard();
                 }
             } catch (e) {
-                console.warn("Server offline. Fallback to Local Offline Mode:", e);
                 isOfflineMode = true;
                 currentUser = "Guest";
                 
-                // Read local cookie score
                 const savedCount = getLocalCookie("whipCount");
                 if (savedCount !== null) {
                     const parsed = parseInt(savedCount, 10);
-                    if (!isNaN(parsed)) {
-                        whipCount = parsed;
-                    }
+                    if (!isNaN(parsed)) whipCount = parsed;
                 }
                 countVal.innerText = whipCount;
                 updateRank(whipCount);
-                
-                // Bypass signup modal since we're offline
                 signupModal.style.display = 'none';
-                
-                // Set offline banner in leaderboard
-                leaderboardBody.innerHTML = `
-                    <tr>
-                        <td colspan="3" style="text-align: center; color: #ff0000; font-weight: bold; animation: blink-anim 1s step-start infinite;">
-                            OFFLINE FALLBACK MODE
-                            <div style="font-size: 10px; color: #000; font-weight: normal; margin-top: 5px;">
-                                (Run node server.js to connect)
-                            </div>
-                        </td>
-                    </tr>
-                `;
             }
         }
 
-        // Audio player helper pool for mobile/desktop overlap without cutting off
         function playScreamSound(vol) {
             try {
                 const s = new Audio('scream.mp3');
@@ -913,10 +1003,9 @@
 
             const now = performance.now();
             if (now - lastWhipTime < COOLDOWN) {
-                return; // Enforce cooldown debounce
+                return;
             }
 
-            // Combo system check
             if (now - lastWhipTime <= COMBO_WINDOW) {
                 comboCount++;
             } else {
@@ -924,49 +1013,33 @@
             }
             lastWhipTime = now;
 
-            // Clear existing combo decay timer and set a new one
-            if (comboTimeout) {
-                clearTimeout(comboTimeout);
-            }
-            comboTimeout = setTimeout(() => {
-                resetCombo();
-            }, COMBO_WINDOW);
+            if (comboTimeout) clearTimeout(comboTimeout);
+            comboTimeout = setTimeout(resetCombo, COMBO_WINDOW);
 
-            // Update combo text and style
             updateComboUI();
-
-            // Trigger haptic vibration on devices supporting it
             triggerHaptic(comboCount >= 5);
 
-            // Trigger physical whip canvas crack targeting the central omer.png photo center
             if (typeof triggerWhipCrack === 'function') {
                 const angle = flickAngle !== null ? flickAngle : getAngleToTarget();
                 triggerWhipCrack(angle);
             }
 
-            // Optimistic scoring visual and audio effects
             whipCount++;
             countVal.innerText = whipCount;
             updateRank(whipCount);
 
-            // Play Whip and Scream sounds with dynamic volume scaling
             if (!isMuted) {
                 const vol = Math.min(1.0, 0.45 + (comboCount - 1) * 0.12);
-                
                 if (whipAudio) {
                     whipAudio.volume = vol;
                     whipAudio.currentTime = 0;
                     whipAudio.play().catch(() => {});
                 }
-
                 playScreamSound(vol);
             }
 
-            // Visual feedback (Flash background & shake image wrapper)
             body.classList.remove('flash-red');
             imageWrapper.classList.remove('whip-shake');
-            
-            // Force repaint to restart CSS animations
             void body.offsetWidth;
             void imageWrapper.offsetWidth;
 
@@ -979,7 +1052,6 @@
                 imageWrapper.classList.remove('whip-shake');
             }, 120);
 
-            // Send score to backend or save locally if offline
             if (isOfflineMode) {
                 setLocalCookie("whipCount", whipCount);
             } else {
@@ -994,9 +1066,7 @@
                     } else {
                         location.reload();
                     }
-                } catch (e) {
-                    console.error("Error updating score:", e);
-                }
+                } catch (e) {}
             }
         }
 
@@ -1022,7 +1092,6 @@
                     whipCount = data.score;
                     countVal.innerText = whipCount;
                     updateRank(whipCount);
-                    
                     signupError.style.display = 'none';
                     usernameInput.value = '';
 
@@ -1033,13 +1102,11 @@
                     signupError.style.display = 'block';
                 }
             } catch (e) {
-                console.error("Signup failed:", e);
                 signupError.innerText = "SERVER ERROR. CRY ABOUT IT!";
                 signupError.style.display = 'block';
             }
         }
 
-        // Reset Counter (Logout/Destroy Account)
         async function resetCount() {
             if (isOfflineMode) {
                 if (confirm("Reset local score back to 0?")) {
@@ -1053,26 +1120,45 @@
                     try {
                         await fetch('/api/logout', { method: 'POST' });
                         location.reload();
-                    } catch (e) {
-                        console.error("Logout failed:", e);
-                    }
+                    } catch (e) {}
                 }
             }
         }
 
-        // Setup Signup Event Listeners
         signupSubmitBtn.addEventListener('click', handleSignup);
         usernameInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                handleSignup();
+            if (e.key === 'Enter') handleSignup();
+        });
+
+        // Leaderboard modal listeners
+        openLeaderboardBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fetchLeaderboard();
+            leaderboardModal.style.display = 'flex';
+        });
+
+        closeLeaderboardBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            leaderboardModal.style.display = 'none';
+        });
+
+        closeLeaderboardBtnBottom.addEventListener('click', (e) => {
+            e.stopPropagation();
+            leaderboardModal.style.display = 'none';
+        });
+
+        leaderboardModal.addEventListener('click', (e) => {
+            if (e.target === leaderboardModal) {
+                leaderboardModal.style.display = 'none';
             }
         });
 
         // ==========================================
         // MOUSE & TOUCH INPUT HANDLING
+        // STRICT MOBILE SCROLL LOCK - ZERO JITTER
         // ==========================================
 
-        // Tap/Click directly on the image to whip (Universal for Mobile, Tablet, PC)
+        // Tap directly on Omer's photo to whip
         imageWrapper.addEventListener('pointerdown', (e) => {
             if (e.button && e.button !== 0) return;
             mouseX = e.clientX;
@@ -1080,12 +1166,11 @@
             triggerWhip(getAngleToTarget(mouseX, mouseY));
         });
 
-        // Click anywhere on background to whip towards Omer (except buttons & inputs)
+        // Click anywhere on background
         document.addEventListener('click', (e) => {
-            if (e.target.closest('button') || e.target.closest('input') || e.target.closest('#signup-modal') || e.target.closest('a')) {
+            if (e.target.closest('button') || e.target.closest('input') || e.target.closest('.modal-overlay') || e.target.closest('a')) {
                 return;
             }
-            // Don't double trigger if clicked on imageWrapper itself
             if (e.target.closest('#whip-image-wrapper')) {
                 return;
             }
@@ -1096,7 +1181,7 @@
             triggerWhip(getAngleToTarget(mouseX, mouseY));
         });
 
-        // --- Touch Gestures for Mobile & Tablet (Swipe / Flick / Track) ---
+        // Touch Gestures for Mobile & Tablet (Swipe / Flick / Track)
         let touchStartX = 0;
         let touchStartY = 0;
         let touchStartTime = 0;
@@ -1107,6 +1192,11 @@
         let lastTouchVy = 0;
 
         window.addEventListener('touchstart', (e) => {
+            // Prevent multi-touch gesture zoom
+            if (e.touches.length > 1 && e.cancelable) {
+                e.preventDefault();
+            }
+
             if (e.touches.length > 0) {
                 const t = e.touches[0];
                 touchStartX = t.clientX;
@@ -1121,9 +1211,20 @@
                 mouseX = t.clientX;
                 mouseY = t.clientY;
             }
-        }, { passive: true });
+        }, { passive: false });
 
+        // CRITICAL FIX: Lock viewport scrolling completely when user swipes / flicks on mobile
         window.addEventListener('touchmove', (e) => {
+            // If the user is scrolling inside the open leaderboard modal or signup modal, allow scroll
+            if (e.target.closest('.scrollable-content')) {
+                return;
+            }
+
+            // In all other cases, CANCEL browser scroll action!
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+
             if (e.touches.length > 0) {
                 const t = e.touches[0];
                 const now = performance.now();
@@ -1145,8 +1246,8 @@
                         const ay = dVy / dt;
                         const acceleration = Math.sqrt(ax * ax + ay * ay);
 
-                        // Mobile flick threshold
-                        if (speed > 1.0 || (acceleration > 0.04 && speed > 0.6)) {
+                        // Mobile swipe flick detection
+                        if (speed > 0.8 || (acceleration > 0.03 && speed > 0.5)) {
                             const targetImg = document.getElementById('whip-target-img');
                             if (targetImg) {
                                 const rect = targetImg.getBoundingClientRect();
@@ -1160,7 +1261,7 @@
 
                                 if (distToTarget > 0 && moveDist > 0) {
                                     const cosTheta = (dx * toTargetX + dy * toTargetY) / (moveDist * distToTarget);
-                                    if (cosTheta > 0.3 || speed > 1.4) {
+                                    if (cosTheta > 0.2 || speed > 1.2) {
                                         const flickAngle = Math.atan2(dy, dx);
                                         triggerWhip(flickAngle);
                                     }
@@ -1177,7 +1278,7 @@
                 lastTouchY = t.clientY;
                 lastTouchTime = now;
             }
-        }, { passive: true });
+        }, { passive: false });
 
         window.addEventListener('touchend', (e) => {
             if (lastTouchX !== null && lastTouchY !== null) {
@@ -1187,7 +1288,7 @@
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 // Quick release flick on touchscreen
-                if (dt < 300 && dist > 35) {
+                if (dt < 320 && dist > 30) {
                     const flickAngle = Math.atan2(dy, dx);
                     triggerWhip(flickAngle);
                 }
@@ -1197,7 +1298,7 @@
             lastTouchTime = null;
         }, { passive: true });
 
-        // --- Mouse Acceleration-based whipping trigger for Desktop ---
+        // Mouse Acceleration-based whipping trigger for Desktop
         let lastX = null;
         let lastY = null;
         let lastTime = null;
@@ -1281,10 +1382,10 @@
             e.stopPropagation();
             isMuted = !isMuted;
             if (isMuted) {
-                muteBtn.innerText = "Toggle Sound: OFF";
+                muteBtn.innerText = "Sound: OFF";
                 muteBtn.style.color = "#ff0000";
             } else {
-                muteBtn.innerText = "Toggle Sound: ON";
+                muteBtn.innerText = "Sound: ON";
                 muteBtn.style.color = "#000000";
             }
         });
@@ -1303,11 +1404,10 @@
         });
         resizeCanvas();
 
-        const numPoints = 28;       // Responsive nodes for fluid organic curve
-        const segmentLength = 12;   // Segment length for rope bending
+        const numPoints = 28;
+        const segmentLength = 12;
         const points = [];
 
-        // Initialize rope points
         for (let i = 0; i < numPoints; i++) {
             points.push({
                 x: window.innerWidth / 2,
@@ -1320,7 +1420,6 @@
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
 
-        // Crack animation state
         let isCracking = false;
         let crackAngle = 0;
         let crackTime = 0;
@@ -1331,7 +1430,7 @@
             crackTime = performance.now();
         }
 
-        // --- Fire Particle System for Combo Effects ---
+        // Fire Particle System
         let particles = [];
 
         class FireParticle {
@@ -1357,17 +1456,11 @@
                 
                 let r, g, b;
                 if (this.life > 0.6) {
-                    r = 255;
-                    g = 255;
-                    b = 200;
+                    r = 255; g = 255; b = 200;
                 } else if (this.life > 0.3) {
-                    r = 255;
-                    g = 150 + Math.floor(this.life * 100);
-                    b = 0;
+                    r = 255; g = 150 + Math.floor(this.life * 100); b = 0;
                 } else {
-                    r = 255;
-                    g = Math.floor(this.life * 400);
-                    b = 0;
+                    r = 255; g = Math.floor(this.life * 400); b = 0;
                 }
                 
                 cCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.life})`;
@@ -1375,13 +1468,10 @@
             }
         }
 
-        // Main animation loop
         function updateWhip() {
-            // Update handle to follow touch/mouse instantly
             points[0].x = mouseX;
             points[0].y = mouseY;
 
-            // Apply variable damping along whip
             for (let i = 1; i < numPoints; i++) {
                 const p = points[i];
                 const t = i / numPoints;
@@ -1394,10 +1484,9 @@
                 p.oldY = p.y;
                 
                 p.x += vx;
-                p.y += vy + 0.25; // Gravity drop
+                p.y += vy + 0.25;
             }
 
-            // Handle crack snap animation overlay with travelling wave propagation
             if (isCracking) {
                 const elapsed = performance.now() - crackTime;
                 if (elapsed > 150) {
@@ -1405,7 +1494,6 @@
                 } else {
                     const progress = elapsed / 150;
                     const snapFactor = Math.pow(1 - progress, 2);
-                    
                     const waveFrequency = 1.8;
                     const waveSpeed = 0.05;
                     
@@ -1436,7 +1524,6 @@
                 }
             }
 
-            // Resolve constraints (rope length)
             for (let iteration = 0; iteration < 5; iteration++) {
                 for (let i = 1; i < numPoints; i++) {
                     const p1 = points[i - 1];
@@ -1469,10 +1556,8 @@
                 }
             }
 
-            // Draw Whip on Canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Spawn fire particles if comboCount >= 5
             if (comboCount >= 5) {
                 for (let i = 0; i < numPoints; i += 2) {
                     if (Math.random() < 0.25) {
@@ -1481,7 +1566,6 @@
                 }
             }
 
-            // Update and draw existing particles
             for (let i = particles.length - 1; i >= 0; i--) {
                 const p = particles[i];
                 p.update();
@@ -1492,7 +1576,6 @@
                 }
             }
 
-            // Draw the tapered whip segments
             for (let i = 0; i < numPoints - 1; i++) {
                 ctx.beginPath();
                 ctx.moveTo(points[i].x, points[i].y);
@@ -1522,14 +1605,12 @@
             }
             ctx.shadowBlur = 0;
 
-            // Draw cracker tip
             const tip = points[numPoints - 1];
             ctx.beginPath();
             ctx.arc(tip.x, tip.y, 4, 0, 2 * Math.PI);
             ctx.fillStyle = '#ff0000';
             ctx.fill();
 
-            // Draw spark flash when cracking
             if (isCracking) {
                 ctx.beginPath();
                 ctx.arc(tip.x, tip.y, 12, 0, 2 * Math.PI);
@@ -1547,10 +1628,7 @@
             requestAnimationFrame(updateWhip);
         }
 
-        // Start physics loop
         requestAnimationFrame(updateWhip);
-
-        // Run Init
         init();
     </script>
 </body>
