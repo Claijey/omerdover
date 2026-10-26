@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0000ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>⚡⚡ omerdover v1.0 ⚡⚡ - The Ultimate Retro Experience</title>
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         /* Retro 2000s chaotic background and style */
         body {
             background-color: #0000ff; /* Bright blue background */
@@ -13,11 +20,14 @@
             font-family: "Comic Sans MS", "Chalkboard SE", "Comic Sans", cursive, sans-serif;
             text-align: center;
             margin: 0;
-            padding: 0;
+            padding: 0 0 30px 0;
             overflow-x: hidden;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-touch-callout: none;
             cursor: pointer; /* Whole screen is clickable */
+            touch-action: manipulation;
+            min-height: 100vh;
         }
 
         /* Top marquee banner */
@@ -25,22 +35,35 @@
             background: #ff0000;
             color: #ffffff;
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-            font-size: 24px;
+            font-size: clamp(15px, 3.8vw, 24px);
             padding: 8px 0;
-            border-bottom: 6px ridge #ffff00;
+            border-bottom: 5px ridge #ffff00;
             text-shadow: 2px 2px 0px #000000;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         /* Main retro container */
         .container {
+            width: calc(100% - 20px);
             max-width: 650px;
-            margin: 40px auto;
+            margin: 15px auto;
             background: #00ffff; /* Cyan container */
-            border: 12px outset #00ff00; /* Green 3D bevel */
-            padding: 30px;
-            box-shadow: 15px 15px 0px #000000;
+            border: 8px outset #00ff00; /* Green 3D bevel */
+            padding: 20px 12px;
+            box-shadow: 8px 8px 0px #000000;
             position: relative;
+        }
+
+        @media (min-width: 600px) {
+            .container {
+                width: calc(100% - 32px);
+                margin: 30px auto;
+                border-width: 12px;
+                padding: 30px;
+                box-shadow: 15px 15px 0px #000000;
+            }
         }
 
         /* Construction tape pattern decoration */
@@ -54,35 +77,38 @@
             );
             height: 15px;
             width: 100%;
-            margin: 15px 0;
+            margin: 12px 0;
             border: 2px inset #fff;
         }
 
         h1 {
             font-family: Impact, Arial Black, sans-serif;
-            font-size: 56px;
+            font-size: clamp(32px, 8.5vw, 56px);
             color: #ff00ff;
-            text-shadow: 4px 4px 0px #000000;
-            margin: 10px 0;
-            letter-spacing: 3px;
+            text-shadow: 3px 3px 0px #000000;
+            margin: 5px 0 10px 0;
+            letter-spacing: clamp(1px, 0.8vw, 3px);
             animation: rainbow-text 1.5s infinite linear;
+            line-height: 1.1;
+            word-break: break-word;
         }
 
         @keyframes rainbow-text {
-            0% { color: #ff00ff; text-shadow: 4px 4px 0px #ffff00; }
-            25% { color: #00ffff; text-shadow: 4px 4px 0px #ff00ff; }
-            50% { color: #ffff00; text-shadow: 4px 4px 0px #00ffff; }
-            75% { color: #00ff00; text-shadow: 4px 4px 0px #ff00ff; }
-            100% { color: #ff00ff; text-shadow: 4px 4px 0px #ffff00; }
+            0% { color: #ff00ff; text-shadow: 3px 3px 0px #ffff00; }
+            25% { color: #00ffff; text-shadow: 3px 3px 0px #ff00ff; }
+            50% { color: #ffff00; text-shadow: 3px 3px 0px #00ffff; }
+            75% { color: #00ff00; text-shadow: 3px 3px 0px #ff00ff; }
+            100% { color: #ff00ff; text-shadow: 3px 3px 0px #ffff00; }
         }
 
         /* Subtitle blinking */
         .subtitle {
-            font-size: 18px;
+            font-size: clamp(12px, 3.2vw, 18px);
             color: #ff0000;
             font-weight: bold;
             text-shadow: 1px 1px 0 #fff;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            line-height: 1.3;
         }
 
         .blink {
@@ -96,42 +122,71 @@
         /* Large counter display */
         .counter-box {
             background-color: #000000;
-            border: 6px inset #808080;
-            padding: 15px;
-            margin: 20px auto;
-            width: 85%;
+            border: 4px inset #808080;
+            padding: 12px 8px;
+            margin: 15px auto;
+            width: 100%;
+            max-width: 520px;
             font-family: "Courier New", Courier, monospace;
             font-weight: bold;
             color: #00ff00; /* Neon green terminal style */
-            font-size: 36px;
+            font-size: clamp(20px, 5.8vw, 36px);
             box-shadow: inset 0 0 15px #00ff00;
             text-shadow: 0 0 5px #00ff00;
+            line-height: 1.25;
+        }
+
+        @media (min-width: 600px) {
+            .counter-box {
+                border-width: 6px;
+                padding: 15px;
+                width: 85%;
+            }
         }
 
         .whip-rank {
-            font-size: 16px;
+            font-size: clamp(12px, 3.2vw, 16px);
             color: #ffaa00;
-            margin-top: 5px;
+            margin-top: 6px;
             font-family: "Comic Sans MS", cursive, sans-serif;
             text-shadow: none;
+            word-break: break-word;
         }
 
         /* Image Wrapper & Photo Styles */
         .image-wrapper {
             position: relative;
             display: inline-block;
-            margin: 15px auto;
-            border: 10px groove #e6e6e6;
+            margin: 10px auto;
+            border: 6px groove #e6e6e6;
             background-color: #000;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.3);
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
             user-select: none;
             -webkit-user-select: none;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: transform 0.05s ease;
+            max-width: 100%;
+        }
+
+        @media (min-width: 600px) {
+            .image-wrapper {
+                border-width: 10px;
+                box-shadow: 8px 8px 0px rgba(0,0,0,0.3);
+                margin: 15px auto;
+            }
+        }
+
+        .image-wrapper:active {
+            transform: scale(0.96);
         }
 
         .image-wrapper img {
             display: block;
-            width: 380px;
-            height: 380px;
+            width: min(380px, 72vw);
+            height: min(380px, 72vw);
+            max-width: 100%;
+            aspect-ratio: 1 / 1;
             object-fit: cover;
             /* CRITICAL CSS: prevents selection, dragging, and cursor interactions */
             user-select: none;
@@ -165,9 +220,25 @@
             background-image: none !important;
         }
 
+        .whip-hint {
+            font-size: clamp(11px, 3.2vw, 13px);
+            color: #000080;
+            font-weight: bold;
+            margin: 12px auto;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px dashed #000080;
+            max-width: 520px;
+            line-height: 1.4;
+        }
+
         /* Retro Buttons */
         .btn-container {
             margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-retro {
@@ -178,13 +249,14 @@
             border-bottom: 3px solid #808080;
             border-right: 3px solid #808080;
             font-family: 'MS Sans Serif', Geneva, sans-serif;
-            font-size: 14px;
+            font-size: clamp(12px, 3.2vw, 14px);
             font-weight: bold;
-            padding: 6px 14px;
+            padding: 8px 16px;
+            min-height: 42px;
             cursor: pointer;
             outline: none;
-            margin: 5px;
             box-shadow: 1px 1px 0px #000000;
+            touch-action: manipulation;
         }
 
         .btn-retro:active {
@@ -200,7 +272,9 @@
         .sparkle-text {
             color: #ff00ff;
             font-weight: bold;
-            font-size: 20px;
+            font-size: clamp(18px, 5vw, 24px);
+            display: inline-block;
+            margin-top: 8px;
             animation: pulse-text 0.8s infinite alternate;
         }
 
@@ -211,22 +285,22 @@
 
         /* Visitor Guestbook Counter Badge & Web Badges */
         .visitor-section {
-            margin-top: 30px;
+            margin-top: 25px;
             border-top: 4px dashed #ff00ff;
-            padding-top: 20px;
+            padding-top: 15px;
         }
 
         .guestbook-title {
-            font-size: 18px;
+            font-size: clamp(14px, 3.8vw, 18px);
             color: #000000;
             margin-bottom: 10px;
         }
 
         .footer-badges {
-            margin-top: 20px;
+            margin-top: 15px;
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
@@ -283,6 +357,7 @@
             justify-content: center;
             align-items: center;
             z-index: 10000;
+            padding: 15px;
         }
         
         .modal-box {
@@ -291,9 +366,10 @@
             border-left: 4px solid #ffffff;
             border-bottom: 4px solid #808080;
             border-right: 4px solid #808080;
-            width: 400px;
-            padding: 20px;
-            box-shadow: 10px 10px 0px #000000;
+            width: 100%;
+            max-width: 400px;
+            padding: 18px;
+            box-shadow: 8px 8px 0px #000000;
             text-align: left;
             color: #000000;
         }
@@ -304,8 +380,8 @@
             padding: 4px 8px;
             font-family: Arial, sans-serif;
             font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 15px;
+            font-size: 15px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -313,10 +389,10 @@
         }
 
         .modal-input {
-            width: 90%;
-            padding: 6px;
+            width: 100%;
+            padding: 8px;
             font-family: "Courier New", Courier, monospace;
-            font-size: 16px;
+            font-size: 16px; /* Prevents auto-zoom on iOS Safari */
             margin: 10px 0;
             border: 3px inset #808080;
             background: #ffffff;
@@ -326,7 +402,7 @@
         .modal-error {
             color: #ff0000;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             margin-top: 5px;
             display: none;
             font-family: "Comic Sans MS", cursive, sans-serif;
@@ -336,15 +412,25 @@
         /* Leaderboard Panel styles */
         .leaderboard-panel {
             background: #d4d0c8;
-            border-top: 4px solid #ffffff;
-            border-left: 4px solid #ffffff;
-            border-bottom: 4px solid #808080;
-            border-right: 4px solid #808080;
-            margin-top: 25px;
-            padding: 15px;
-            box-shadow: 8px 8px 0px #000000;
+            border-top: 3px solid #ffffff;
+            border-left: 3px solid #ffffff;
+            border-bottom: 3px solid #808080;
+            border-right: 3px solid #808080;
+            margin-top: 20px;
+            padding: 10px;
+            box-shadow: 6px 6px 0px #000000;
             color: #000000;
             text-align: left;
+            overflow-x: auto;
+        }
+
+        @media (min-width: 600px) {
+            .leaderboard-panel {
+                border-width: 4px;
+                margin-top: 25px;
+                padding: 15px;
+                box-shadow: 8px 8px 0px #000000;
+            }
         }
 
         .leaderboard-title {
@@ -353,7 +439,7 @@
             padding: 4px 8px;
             font-family: Arial, sans-serif;
             font-weight: bold;
-            font-size: 16px;
+            font-size: clamp(13px, 3.5vw, 16px);
             margin-bottom: 10px;
             border: 2px inset #fff;
         }
@@ -363,21 +449,25 @@
             border-collapse: collapse;
             font-family: Arial, sans-serif;
             background: #ffffff;
+            min-width: 250px;
         }
 
         .leaderboard-table th {
             background: #808080;
             color: #ffffff;
-            padding: 5px;
+            padding: 6px 4px;
             border: 2px outset #ffffff;
             text-align: left;
+            font-size: clamp(11px, 3vw, 13px);
         }
 
         .leaderboard-table td {
-            padding: 6px;
+            padding: 6px 4px;
             border: 2px inset #ffffff;
             font-family: "Courier New", Courier, monospace;
             font-weight: bold;
+            font-size: clamp(11px, 3vw, 13px);
+            word-break: break-all;
         }
         
         .leaderboard-table tr:nth-child(even) {
@@ -392,22 +482,22 @@
         /* Combo counter styles */
         .combo-box {
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-            font-size: 54px;
+            font-size: clamp(30px, 8.5vw, 54px);
             color: #ff3300;
             text-shadow: 3px 3px 0px #ffff00, -2px -2px 0px #000;
-            margin: 15px auto 5px auto;
+            margin: 10px auto 5px auto;
             display: none;
             text-align: center;
             font-weight: bold;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             animation: combo-pop 0.15s ease-out;
             user-select: none;
-            -webkit-select: none;
+            -webkit-user-select: none;
         }
 
         .combo-fire {
             color: #ffcc00 !important;
-            text-shadow: 0 0 10px #ff3300, 0 0 20px #ff3300, 4px 4px 0px #000000 !important;
+            text-shadow: 0 0 10px #ff3300, 0 0 20px #ff3300, 3px 3px 0px #000000 !important;
             animation: combo-fire-shake 0.08s infinite alternate !important;
         }
 
@@ -418,20 +508,20 @@
         }
 
         @keyframes combo-fire-shake {
-            0% { transform: translate(3px, 2px) scale(1.15) rotate(-1deg); }
-            100% { transform: translate(-3px, -2px) scale(1.2) rotate(1deg); }
+            0% { transform: translate(3px, 2px) scale(1.12) rotate(-1deg); }
+            100% { transform: translate(-3px, -2px) scale(1.18) rotate(1deg); }
         }
     </style>
 </head>
 <body>
 
     <!-- Viewport overlay canvas for whip physics animation -->
-    <canvas id="whip-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 99999;"></canvas>
+    <canvas id="whip-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 99999; touch-action: none;"></canvas>
 
     <!-- Top marquee banner -->
     <div class="marquee-banner">
         <marquee scrollamount="8" behavior="scroll" direction="left">
-            🔥 WELCOME TO omerdover v1.0! 🔥 FLICK YOUR MOUSE RAPIDLY TO CRACK THE WHIP! ⚡ BOTH WHIP & SCREAM SOUNDS ACTIVATED! 🔊 OPTIMIZED FOR NETSCAPE NAVIGATOR 4.0 & INTERNET EXPLORER 5.5! 🚀 NO COOKIES WERE HARMED IN THE MAKING OF THIS MEME... EXCLUDING THE ONE WE ARE SAVING YOUR SCORE IN! 🍪
+            🔥 WELCOME TO omerdover v1.0! 🔥 FLICK MOUSE OR TAP/SWIPE ON MOBILE TO CRACK THE WHIP! ⚡ BOTH WHIP & SCREAM SOUNDS ACTIVATED! 🔊 NOW 100% OPTIMIZED FOR MOBILE & TABLETS! 📱 RETRO EXPERIENCES FOREVER! 🚀 NO COOKIES WERE HARMED IN THE MAKING OF THIS MEME... EXCLUDING THE ONE SAVING YOUR SCORE! 🍪
         </marquee>
     </div>
 
@@ -448,7 +538,7 @@
         <!-- The main whip count board -->
         <div class="counter-box" id="counter-box">
             Whip Count: <span id="whip-count-val">0</span>
-            <div class="whip-rank" id="whip-rank-val">Rank: Whip Novice (Flick mouse to start!)</div>
+            <div class="whip-rank" id="whip-rank-val">Rank: Whip Novice (Tap or flick to start!)</div>
         </div>
 
         <!-- Combo Counter UI -->
@@ -464,7 +554,8 @@
         </div>
 
         <div class="whip-hint">
-            (Pro Tip: Flick your mouse rapidly towards the photo center to whip! Cooldown: 0.5s)
+            💻 <strong>PC:</strong> Fareyi fotoğrafa doğru hızla savurun!<br>
+            📱 <strong>Mobil & Tablet:</strong> Ömer'e dokunun veya parmağınızı hızla savurun!
         </div>
 
         <div class="btn-container">
@@ -480,8 +571,8 @@
             <table class="leaderboard-table">
                 <thead>
                     <tr>
-                        <th style="width: 15%;">Rank</th>
-                        <th style="width: 55%;">User Name</th>
+                        <th style="width: 18%;">Rank</th>
+                        <th style="width: 52%;">User Name</th>
                         <th style="width: 30%;">Whips</th>
                     </tr>
                 </thead>
@@ -496,7 +587,6 @@
         <!-- Visitor/Guestbook sections for premium low-quality vibe -->
         <div class="visitor-section">
             <div class="guestbook-title">You are visitor number:</div>
-            <!-- Old school style digital visitor meter loaded dynamically -->
             <img alt="Visitor Counter" id="visitor-counter-img">
             
             <div class="footer-badges">
@@ -531,9 +621,9 @@
         </div>
     </div>
 
-    <!-- Hidden audio elements using placeholder mp3 paths (sources set dynamically to prevent loading locks) -->
-    <audio id="whip-audio" preload="none"></audio>
-    <audio id="scream-preload" preload="none"></audio>
+    <!-- Hidden audio elements -->
+    <audio id="whip-audio" preload="auto"></audio>
+    <audio id="scream-preload" preload="auto"></audio>
 
     <script>
         // DOM Elements
@@ -542,6 +632,7 @@
         const rankVal = document.getElementById('whip-rank-val');
         const imageWrapper = document.getElementById('whip-image-wrapper');
         const whipAudio = document.getElementById('whip-audio');
+        const screamAudioPreload = document.getElementById('scream-preload');
         const resetBtn = document.getElementById('reset-btn');
         const muteBtn = document.getElementById('mute-btn');
         const comboBox = document.getElementById('combo-box');
@@ -559,7 +650,7 @@
         let isMuted = false;
         let animationTimeout = null;
         let lastWhipTime = 0;
-        const COOLDOWN = 500; // Overhauled strict cooldown (500ms debounce)
+        const COOLDOWN = 280; // Responsive debounce allowing quick taps
         let currentUser = null;
         let leaderboardInterval = null;
         let isOfflineMode = false;
@@ -567,7 +658,43 @@
         // Combo System State
         let comboCount = 0;
         let comboTimeout = null;
-        const COMBO_WINDOW = 1000; // 2.5s window to maintain combo
+        const COMBO_WINDOW = 1500; // 1.5s window to maintain combo
+
+        // Audio Unlock flag for Mobile Browsers (iOS Safari & Android Chrome)
+        let audioUnlocked = false;
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            audioUnlocked = true;
+            try {
+                if (whipAudio) {
+                    whipAudio.play().then(() => {
+                        whipAudio.pause();
+                        whipAudio.currentTime = 0;
+                    }).catch(() => {});
+                }
+                if (screamAudioPreload) {
+                    screamAudioPreload.play().then(() => {
+                        screamAudioPreload.pause();
+                        screamAudioPreload.currentTime = 0;
+                    }).catch(() => {});
+                }
+            } catch (e) {}
+        }
+        window.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
+        window.addEventListener('pointerdown', unlockAudio, { once: true, passive: true });
+        window.addEventListener('click', unlockAudio, { once: true, passive: true });
+
+        // Haptic feedback helper for smartphones
+        function triggerHaptic(fire = false) {
+            if (!navigator.vibrate) return;
+            try {
+                if (fire) {
+                    navigator.vibrate([35, 25, 45]);
+                } else {
+                    navigator.vibrate(30);
+                }
+            } catch (e) {}
+        }
 
         function updateComboUI() {
             if (comboCount >= 2) {
@@ -611,16 +738,12 @@
                 };
             }
 
-            const whipAud = document.getElementById('whip-audio');
-            if (whipAud) {
-                whipAud.src = 'whip.mp3';
-                whipAud.preload = 'auto';
+            if (whipAudio) {
+                whipAudio.src = 'whip.mp3';
             }
 
-            const screamAud = document.getElementById('scream-preload');
-            if (screamAud) {
-                screamAud.src = 'scream.mp3';
-                screamAud.preload = 'auto';
+            if (screamAudioPreload) {
+                screamAudioPreload.src = 'scream.mp3';
             }
         });
 
@@ -656,7 +779,7 @@
         function updateRank(count) {
             let rank = "Rank: Whip Novice (Keep flicking!)";
             if (count === 0) {
-                rank = "Rank: Whip Novice (Flick mouse to start!)";
+                rank = "Rank: Whip Novice (Tap or flick to start!)";
             } else if (count > 0 && count <= 10) {
                 rank = "Rank: Whip Trainee 👶";
             } else if (count > 10 && count <= 50) {
@@ -716,13 +839,13 @@
         }
 
         // Helper to calculate target center direction angle
-        function getAngleToTarget() {
+        function getAngleToTarget(originX = mouseX, originY = mouseY) {
             const targetImg = document.getElementById('whip-target-img');
             if (!targetImg) return Math.PI / 4;
             const rect = targetImg.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            return Math.atan2(centerY - mouseY, centerX - mouseX);
+            return Math.atan2(centerY - originY, centerX - originX);
         }
 
         // Initialize state on load
@@ -775,13 +898,22 @@
             }
         }
 
+        // Audio player helper pool for mobile/desktop overlap without cutting off
+        function playScreamSound(vol) {
+            try {
+                const s = new Audio('scream.mp3');
+                s.volume = vol;
+                s.play().catch(() => {});
+            } catch (e) {}
+        }
+
         // Trigger Whip crack effect
         async function triggerWhip(flickAngle = null) {
             if (!currentUser) return;
 
             const now = performance.now();
             if (now - lastWhipTime < COOLDOWN) {
-                return; // Enforce strict cooldown lock
+                return; // Enforce cooldown debounce
             }
 
             // Combo system check
@@ -803,6 +935,9 @@
             // Update combo text and style
             updateComboUI();
 
+            // Trigger haptic vibration on devices supporting it
+            triggerHaptic(comboCount >= 5);
+
             // Trigger physical whip canvas crack targeting the central omer.png photo center
             if (typeof triggerWhipCrack === 'function') {
                 const angle = flickAngle !== null ? flickAngle : getAngleToTarget();
@@ -816,21 +951,15 @@
 
             // Play Whip and Scream sounds with dynamic volume scaling
             if (!isMuted) {
-                const vol = Math.min(1.0, 0.4 + (comboCount - 1) * 0.15);
+                const vol = Math.min(1.0, 0.45 + (comboCount - 1) * 0.12);
                 
-                // Whip sound (interrupted/restarted)
-                whipAudio.volume = vol;
-                whipAudio.currentTime = 0;
-                whipAudio.play().catch(err => {
-                    console.log("Whip audio playback was blocked or failed:", err);
-                });
+                if (whipAudio) {
+                    whipAudio.volume = vol;
+                    whipAudio.currentTime = 0;
+                    whipAudio.play().catch(() => {});
+                }
 
-                // Scream sound (overlapping)
-                const screamAudio = new Audio('scream.mp3');
-                screamAudio.volume = vol;
-                screamAudio.play().catch(err => {
-                    console.log("Scream audio playback was blocked or failed:", err);
-                });
+                playScreamSound(vol);
             }
 
             // Visual feedback (Flash background & shake image wrapper)
@@ -939,15 +1068,147 @@
             }
         });
 
-        // Mouse Acceleration-based whipping trigger variables
+        // ==========================================
+        // MOUSE & TOUCH INPUT HANDLING
+        // ==========================================
+
+        // Tap/Click directly on the image to whip (Universal for Mobile, Tablet, PC)
+        imageWrapper.addEventListener('pointerdown', (e) => {
+            if (e.button && e.button !== 0) return;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            triggerWhip(getAngleToTarget(mouseX, mouseY));
+        });
+
+        // Click anywhere on background to whip towards Omer (except buttons & inputs)
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('input') || e.target.closest('#signup-modal') || e.target.closest('a')) {
+                return;
+            }
+            // Don't double trigger if clicked on imageWrapper itself
+            if (e.target.closest('#whip-image-wrapper')) {
+                return;
+            }
+            if (e.clientX && e.clientY) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            }
+            triggerWhip(getAngleToTarget(mouseX, mouseY));
+        });
+
+        // --- Touch Gestures for Mobile & Tablet (Swipe / Flick / Track) ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+        let lastTouchX = null;
+        let lastTouchY = null;
+        let lastTouchTime = null;
+        let lastTouchVx = 0;
+        let lastTouchVy = 0;
+
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 0) {
+                const t = e.touches[0];
+                touchStartX = t.clientX;
+                touchStartY = t.clientY;
+                touchStartTime = performance.now();
+                lastTouchX = t.clientX;
+                lastTouchY = t.clientY;
+                lastTouchTime = touchStartTime;
+                lastTouchVx = 0;
+                lastTouchVy = 0;
+
+                mouseX = t.clientX;
+                mouseY = t.clientY;
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                const t = e.touches[0];
+                const now = performance.now();
+                mouseX = t.clientX;
+                mouseY = t.clientY;
+
+                if (lastTouchX !== null && lastTouchY !== null && lastTouchTime !== null) {
+                    const dt = now - lastTouchTime;
+                    if (dt > 0) {
+                        const dx = t.clientX - lastTouchX;
+                        const dy = t.clientY - lastTouchY;
+                        const speed = Math.sqrt(dx * dx + dy * dy) / dt;
+
+                        const vx = dx / dt;
+                        const vy = dy / dt;
+                        const dVx = vx - lastTouchVx;
+                        const dVy = vy - lastTouchVy;
+                        const ax = dVx / dt;
+                        const ay = dVy / dt;
+                        const acceleration = Math.sqrt(ax * ax + ay * ay);
+
+                        // Mobile flick threshold
+                        if (speed > 1.0 || (acceleration > 0.04 && speed > 0.6)) {
+                            const targetImg = document.getElementById('whip-target-img');
+                            if (targetImg) {
+                                const rect = targetImg.getBoundingClientRect();
+                                const centerX = rect.left + rect.width / 2;
+                                const centerY = rect.top + rect.height / 2;
+
+                                const toTargetX = centerX - t.clientX;
+                                const toTargetY = centerY - t.clientY;
+                                const distToTarget = Math.sqrt(toTargetX * toTargetX + toTargetY * toTargetY);
+                                const moveDist = Math.sqrt(dx * dx + dy * dy);
+
+                                if (distToTarget > 0 && moveDist > 0) {
+                                    const cosTheta = (dx * toTargetX + dy * toTargetY) / (moveDist * distToTarget);
+                                    if (cosTheta > 0.3 || speed > 1.4) {
+                                        const flickAngle = Math.atan2(dy, dx);
+                                        triggerWhip(flickAngle);
+                                    }
+                                }
+                            }
+                        }
+
+                        lastTouchVx = vx;
+                        lastTouchVy = vy;
+                    }
+                }
+
+                lastTouchX = t.clientX;
+                lastTouchY = t.clientY;
+                lastTouchTime = now;
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+            if (lastTouchX !== null && lastTouchY !== null) {
+                const dt = performance.now() - touchStartTime;
+                const dx = lastTouchX - touchStartX;
+                const dy = lastTouchY - touchStartY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                // Quick release flick on touchscreen
+                if (dt < 300 && dist > 35) {
+                    const flickAngle = Math.atan2(dy, dx);
+                    triggerWhip(flickAngle);
+                }
+            }
+            lastTouchX = null;
+            lastTouchY = null;
+            lastTouchTime = null;
+        }, { passive: true });
+
+        // --- Mouse Acceleration-based whipping trigger for Desktop ---
         let lastX = null;
         let lastY = null;
         let lastTime = null;
         let lastVx = 0;
         let lastVy = 0;
-        const ACCEL_THRESHOLD = 0.08; // pixels per millisecond squared (px/ms^2)
+        const ACCEL_THRESHOLD = 0.08;
 
         document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
             const now = performance.now();
             if (lastX !== null && lastY !== null && lastTime !== null) {
                 const dt = now - lastTime;
@@ -955,20 +1216,17 @@
                 if (dt > 0) {
                     const dx = e.clientX - lastX;
                     const dy = e.clientY - lastY;
-                    const speed = Math.sqrt(dx * dx + dy * dy) / dt; // Current speed (px/ms)
+                    const speed = Math.sqrt(dx * dx + dy * dy) / dt;
                     
-                    // Current velocity components (px/ms)
                     const vx = dx / dt;
                     const vy = dy / dt;
                     
-                    // Acceleration (change in velocity components over time)
                     const dVx = vx - lastVx;
                     const dVy = vy - lastVy;
                     const ax = dVx / dt;
                     const ay = dVy / dt;
                     const acceleration = Math.sqrt(ax * ax + ay * ay);
                     
-                    // Check acceleration and speed threshold first (deliberate flick check)
                     if (acceleration > ACCEL_THRESHOLD && speed > 1.2) {
                         const targetImg = document.getElementById('whip-target-img');
                         if (targetImg) {
@@ -976,27 +1234,19 @@
                             const centerX = rect.left + rect.width / 2;
                             const centerY = rect.top + rect.height / 2;
                             
-                            // Vector from previous mouse coordinate to photo center
                             const toTargetX = centerX - lastX;
                             const toTargetY = centerY - lastY;
                             const distToTarget = Math.sqrt(toTargetX * toTargetX + toTargetY * toTargetY);
-                            
                             const moveDist = Math.sqrt(dx * dx + dy * dy);
                             
                             if (distToTarget > 0 && moveDist > 0) {
-                                // 1. Target Direction Alignment: Vector angle of motion must point towards center of container
-                                // cosTheta > 0.8 represents approx 36 degrees cone alignment pointing directly towards the photo
                                 const cosTheta = (dx * toTargetX + dy * toTargetY) / (moveDist * distToTarget);
-                                
-                                // 2. Origination: Flick must originate outside the photo container
                                 const isOutside = lastX < rect.left || lastX > rect.right || lastY < rect.top || lastY > rect.bottom;
-                                
-                                // 3. Edge Padding Exclusion: Exclude mouse positions within 50px of window edges (filters random edge spikes)
-                                const edgePadding = 50;
+                                const edgePadding = 40;
                                 const isNearEdge = e.clientX < edgePadding || e.clientX > window.innerWidth - edgePadding ||
                                                    e.clientY < edgePadding || e.clientY > window.innerHeight - edgePadding;
                                 
-                                if (cosTheta > 0.8 && isOutside && !isNearEdge) {
+                                if (cosTheta > 0.75 && isOutside && !isNearEdge) {
                                     const flickAngle = Math.atan2(dy, dx);
                                     triggerWhip(flickAngle);
                                 }
@@ -1013,7 +1263,6 @@
             lastTime = now;
         });
 
-        // Reset tracking on mouse leave to prevent velocity spikes on re-entry
         document.addEventListener('mouseleave', () => {
             lastX = null;
             lastY = null;
@@ -1024,10 +1273,12 @@
 
         // Setup Buttons
         resetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             resetCount();
         });
 
         muteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             isMuted = !isMuted;
             if (isMuted) {
                 muteBtn.innerText = "Toggle Sound: OFF";
@@ -1047,10 +1298,13 @@
             canvas.height = window.innerHeight;
         }
         window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(resizeCanvas, 100);
+        });
         resizeCanvas();
 
-        const numPoints = 30;       // More nodes for smoother, organic wave curves
-        const segmentLength = 12;   // Slightly smaller segments for fluid rope bending
+        const numPoints = 28;       // Responsive nodes for fluid organic curve
+        const segmentLength = 12;   // Segment length for rope bending
         const points = [];
 
         // Initialize rope points
@@ -1065,12 +1319,6 @@
 
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
-
-        // Keep track of current mouse coordinates
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
 
         // Crack animation state
         let isCracking = false;
@@ -1090,10 +1338,9 @@
             constructor(x, y) {
                 this.x = x + (Math.random() - 0.5) * 10;
                 this.y = y + (Math.random() - 0.5) * 10;
-                // Drift upwards and outward
                 this.vx = (Math.random() - 0.5) * 1.5;
                 this.vy = -1.5 - Math.random() * 2.0;
-                this.life = 1.0; // Decay from 1.0 to 0.0
+                this.life = 1.0;
                 this.decay = 0.02 + Math.random() * 0.03;
                 this.size = 3 + Math.random() * 5;
             }
@@ -1112,15 +1359,15 @@
                 if (this.life > 0.6) {
                     r = 255;
                     g = 255;
-                    b = 200; // whitish yellow
+                    b = 200;
                 } else if (this.life > 0.3) {
                     r = 255;
                     g = 150 + Math.floor(this.life * 100);
-                    b = 0; // orange yellow
+                    b = 0;
                 } else {
                     r = 255;
                     g = Math.floor(this.life * 400);
-                    b = 0; // red-orange to red
+                    b = 0;
                 }
                 
                 cCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.life})`;
@@ -1130,15 +1377,13 @@
 
         // Main animation loop
         function updateWhip() {
-            // Update handle to follow mouse instantly
+            // Update handle to follow touch/mouse instantly
             points[0].x = mouseX;
             points[0].y = mouseY;
 
-            // Apply variable damping to simulate wave speedup along the whip (irl physics mass distribution)
+            // Apply variable damping along whip
             for (let i = 1; i < numPoints; i++) {
                 const p = points[i];
-                
-                // Damping increases from 0.72 (heavy damping near handle) to 0.96 (low damping near tip)
                 const t = i / numPoints;
                 const damping = 0.72 + t * 0.24; 
                 
@@ -1149,50 +1394,40 @@
                 p.oldY = p.y;
                 
                 p.x += vx;
-                p.y += vy + 0.25; // Gravity drop (downward pull)
+                p.y += vy + 0.25; // Gravity drop
             }
 
             // Handle crack snap animation overlay with travelling wave propagation
-            // CRITICAL FIX: Run BEFORE constraint solver so distances are dynamically resolved in the same frame,
-            // preventing the whip tip from exploding or fragmenting on the next frame!
             if (isCracking) {
                 const elapsed = performance.now() - crackTime;
                 if (elapsed > 150) {
                     isCracking = false;
                 } else {
-                    const progress = elapsed / 150; // 0 to 1
-                    const snapFactor = Math.pow(1 - progress, 2); // snaps hard, relaxes quickly
+                    const progress = elapsed / 150;
+                    const snapFactor = Math.pow(1 - progress, 2);
                     
-                    // Wave speed parameters
                     const waveFrequency = 1.8;
                     const waveSpeed = 0.05;
                     
                     for (let i = 1; i < numPoints; i++) {
-                        // Make the target path a smooth arc curving towards the target center (omer.png center)
                         const progressAlongCord = i / numPoints;
-                        const curveHeight = Math.sin(progressAlongCord * Math.PI) * 45; // Max bend in the middle
+                        const curveHeight = Math.sin(progressAlongCord * Math.PI) * 45;
                         
                         const targetX = points[0].x + Math.cos(crackAngle) * i * segmentLength;
                         const targetY = points[0].y + Math.sin(crackAngle) * i * segmentLength;
                         
-                        // Perpendicular offset for bending
                         const bendAngle = crackAngle + Math.PI / 2;
                         const finalTargetX = targetX + Math.cos(bendAngle) * curveHeight;
                         const finalTargetY = targetY + Math.sin(bendAngle) * curveHeight;
                         
-                        // Add a tiny sinusoidal wave shape that propagates down the whip during the snap
                         const waveOffset = Math.sin(i * waveFrequency - elapsed * waveSpeed) * 12 * (1 - progress) * progressAlongCord;
-                        
-                        // Wave normal vector (perpendicular to crackAngle)
                         const normalAngle = crackAngle + Math.PI / 2;
                         const finalX = finalTargetX + Math.cos(normalAngle) * waveOffset;
                         const finalY = finalTargetY + Math.sin(normalAngle) * waveOffset;
                         
-                        // Interpolate points towards target
                         const newX = points[i].x * (1 - snapFactor) + finalX * snapFactor;
                         const newY = points[i].y * (1 - snapFactor) + finalY * snapFactor;
                         
-                        // Prevent explosive velocities by resetting Verlet historical state to target
                         points[i].x = newX;
                         points[i].y = newY;
                         points[i].oldX = newX;
@@ -1201,7 +1436,7 @@
                 }
             }
 
-            // Resolve constraints (rope length) - Mass-weighted from handle to tip
+            // Resolve constraints (rope length)
             for (let iteration = 0; iteration < 5; iteration++) {
                 for (let i = 1; i < numPoints; i++) {
                     const p1 = points[i - 1];
@@ -1212,20 +1447,17 @@
                     const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
                     const difference = segmentLength - dist;
                     
-                    // Mass is heavier closer to the handle, lighter towards the tip
-                    const m1 = numPoints - i + 1; // mass of node 1
-                    const m2 = numPoints - i;     // mass of node 2
+                    const m1 = numPoints - i + 1;
+                    const m2 = numPoints - i;
                     const totalMass = m1 + m2;
                     
-                    // Heavier mass moves LESS, lighter mass moves MORE
-                    const w1 = m2 / totalMass; // weight for p1
-                    const w2 = m1 / totalMass; // weight for p2
+                    const w1 = m2 / totalMass;
+                    const w2 = m1 / totalMass;
                     
                     const offsetX = (dx / dist) * difference;
                     const offsetY = (dy / dist) * difference;
 
                     if (i === 1) {
-                        // Node 1 is attached directly to the handle (fixed mouse point)
                         p2.x += offsetX;
                         p2.y += offsetY;
                     } else {
@@ -1240,7 +1472,6 @@
             // Draw Whip on Canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // --- Particle Engine Update & Draw ---
             // Spawn fire particles if comboCount >= 5
             if (comboCount >= 5) {
                 for (let i = 0; i < numPoints; i += 2) {
@@ -1267,48 +1498,44 @@
                 ctx.moveTo(points[i].x, points[i].y);
                 ctx.lineTo(points[i + 1].x, points[i + 1].y);
                 
-                // Tapering width from handle to tip (12px down to 2px)
                 ctx.lineWidth = 12 * (1 - i / numPoints) + 1.5;
                 ctx.lineCap = 'round';
                 
                 if (comboCount >= 5) {
-                    // Draw outer fire glow
                     ctx.strokeStyle = '#ff3300';
                     ctx.shadowBlur = 15;
                     ctx.shadowColor = '#ffcc00';
                     ctx.stroke();
                     
-                    // Draw inner white-hot core
                     ctx.beginPath();
                     ctx.moveTo(points[i].x, points[i].y);
                     ctx.lineTo(points[i + 1].x, points[i + 1].y);
                     ctx.lineWidth = (12 * (1 - i / numPoints) + 1.5) * 0.4;
                     ctx.strokeStyle = '#ffffcc';
-                    ctx.shadowBlur = 0; // reset shadow for core
+                    ctx.shadowBlur = 0;
                     ctx.stroke();
                 } else {
-                    ctx.strokeStyle = '#5c2d13'; // Deep leather brown color
+                    ctx.strokeStyle = '#5c2d13';
                     ctx.shadowBlur = 0;
                     ctx.stroke();
                 }
             }
-            ctx.shadowBlur = 0; // Reset just in case
+            ctx.shadowBlur = 0;
 
-            // Draw cracker (tip accent)
+            // Draw cracker tip
             const tip = points[numPoints - 1];
             ctx.beginPath();
             ctx.arc(tip.x, tip.y, 4, 0, 2 * Math.PI);
-            ctx.fillStyle = '#ff0000'; // Retro red tail string
+            ctx.fillStyle = '#ff0000';
             ctx.fill();
 
             // Draw spark flash when cracking
             if (isCracking) {
                 ctx.beginPath();
                 ctx.arc(tip.x, tip.y, 12, 0, 2 * Math.PI);
-                ctx.fillStyle = 'rgba(255, 255, 0, 0.9)'; // Bright yellow spark
+                ctx.fillStyle = 'rgba(255, 255, 0, 0.9)';
                 ctx.fill();
 
-                // Draw crack text feedback near the tip
                 ctx.font = 'bold 16px "Comic Sans MS", cursive, sans-serif';
                 ctx.fillStyle = '#ff00ff';
                 ctx.strokeStyle = '#ffffff';
