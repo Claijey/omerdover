@@ -42,8 +42,8 @@ function getCookie(req, name) {
 }
 
 // Encode session data into a base64 cookie token
-function encodeSession(username, score) {
-    const rawStr = `${username}|${score}`;
+function encodeSession(username, score, lastWhip = 0) {
+    const rawStr = `${username}|${score}|${lastWhip}`;
     return Buffer.from(rawStr, 'utf8').toString('base64');
 }
 
@@ -53,8 +53,12 @@ function decodeSession(token) {
     try {
         const rawStr = Buffer.from(token, 'base64').toString('utf8');
         const parts = rawStr.split('|');
-        if (parts.length === 2) {
-            return { username: parts[0], score: parseInt(parts[1], 10) || 0 };
+        if (parts.length >= 2) {
+            return { 
+                username: parts[0], 
+                score: parseInt(parts[1], 10) || 0,
+                lastWhip: parts[2] ? parseInt(parts[2], 10) : 0
+            };
         }
     } catch (e) {
         console.error("Failed to decode session token:", e);
@@ -150,22 +154,35 @@ const handler = async (req, res) => {
         if (session) {
             const { username, score } = session;
             const userKey = username.toLowerCase();
+            const now = Date.now();
 
             // Re-sync user record in container memory if missing
             if (!db.users[userKey]) {
-                db.users[userKey] = { username, score };
+                db.users[userKey] = { username, score, lastWhip: 0 };
             } else if (db.users[userKey].score < score) {
                 db.users[userKey].score = score;
             }
 
-            // Increment score
+            // Enforce 0.5s (500ms) hit cooldown
+            const lastWhip = Math.max(db.users[userKey].lastWhip || 0, session.lastWhip || 0);
+            if (now - lastWhip < 500) {
+                return sendJSON(429, { 
+                    success: false, 
+                    cooldown: true, 
+                    message: 'Hit cooldown active (0.5s)!',
+                    score: db.users[userKey].score 
+                });
+            }
+
+            // Increment score & record hit time
             db.users[userKey].score++;
+            db.users[userKey].lastWhip = now;
             saveDB();
 
             const newScore = db.users[userKey].score;
-            const token = encodeSession(username, newScore);
+            const token = encodeSession(username, newScore, now);
 
-            // Update session cookie with the new score
+            // Update session cookie with the new score and hit timestamp
             const cookieVal = `sessionId=${token}; Max-Age=${10 * 365 * 24 * 60 * 60}; Path=/; SameSite=Lax; HttpOnly`;
             return sendJSON(200, { success: true, score: newScore }, { 'Set-Cookie': cookieVal });
         }

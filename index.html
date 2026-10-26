@@ -777,7 +777,7 @@
         let isMuted = false;
         let animationTimeout = null;
         let lastWhipTime = 0;
-        const COOLDOWN = 260; // Fluid debounce allowing fast responsive taps
+        const COOLDOWN = 500; // Strict 0.5s hit cooldown
         let currentUser = null;
         let leaderboardInterval = null;
         let isOfflineMode = false;
@@ -1063,7 +1063,13 @@
                         countVal.innerText = whipCount;
                         updateRank(whipCount);
                         fetchLeaderboard();
-                    } else {
+                    } else if (data.cooldown) {
+                        if (data.score !== undefined) {
+                            whipCount = data.score;
+                            countVal.innerText = whipCount;
+                            updateRank(whipCount);
+                        }
+                    } else if (res.status === 401) {
                         location.reload();
                     }
                 } catch (e) {}
